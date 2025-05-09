@@ -6,6 +6,7 @@ using MediatR;
 using MyApp.Application.Interfaces;
 using MyApp.Core.Entities;
 
+
 namespace MyApp.Application.Users.Commands
 {
     public class RegisterUserHandler: IRequestHandler<RegisterUserCommand, Guid>
@@ -19,30 +20,28 @@ namespace MyApp.Application.Users.Commands
         }
         public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            // This method is called when the RegisterUserCommand is invoked.
-            var user = new User 
+            if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+                throw new ArgumentException("Name, Email, and Password are required.");
+
+            var existingUser = await _userRepository.GetUserByEmailAsync(request.Email);
+            if (existingUser != null)
+                throw new InvalidOperationException("A user with this email already exists.");
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            // Hash the password using BCrypt or any other hashing algorithm
+
+            var user = new User
             {
-                Id = request.Id,
+                Id = Guid.NewGuid(),
                 Name = request.Name,
                 Email = request.Email,
+                Password = hashedPassword,
+                Role = request.Role ?? "User",
                 CreatedAt = DateTime.UtcNow
             };
-            // Validate the user data
-            if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Email))
-            {
-                throw new ArgumentException("Name and Email are required fields.");
-            }
-            // Check if the user already exists
-            var existingUser = await _userRepository.GetUserByIdAsync(request.Id);
-            if (existingUser != null)
-            {
-                throw new InvalidOperationException("User already exists.");
-            }
-            // Save the user to the database
+
             await _userRepository.CreateUserAsync(user);
-             // Return the ID of the newly created user
-             
-             return user.Id; 
-        }    
+            return user.Id;
+        }
     }
 }

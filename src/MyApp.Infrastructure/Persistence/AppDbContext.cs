@@ -36,7 +36,7 @@ namespace MyApp.Infrastructure.Persistence
                     Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                     Name = "Admin",
                     Email = "admin@example.com",
-                    PasswordHash = hashedAdmin,
+                    Password = hashedAdmin,
                     Role = "Admin",
                     CreatedAt = new DateTime(2023, 1, 1)
                 },
@@ -45,7 +45,7 @@ namespace MyApp.Infrastructure.Persistence
                     Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                     Name = "Regular User",
                     Email = "user@example.com",
-                    PasswordHash = hashedUser,
+                    Password = hashedUser,
                     Role = "User",
                     CreatedAt = new DateTime(2023, 1, 2)
                 });

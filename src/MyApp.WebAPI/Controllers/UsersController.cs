@@ -29,6 +29,8 @@ namespace MyApp.WebAPI.Controllers
         // This controller handles HTTP requests related to user operations.
         // It contains endpoints for user registration, login, and profile management.
 
+        [AllowAnonymous]
+        // This endpoint allows users to register by providing their name, email, and password.
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {

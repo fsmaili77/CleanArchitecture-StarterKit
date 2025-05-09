@@ -26,21 +26,17 @@ namespace MyApp.WebAPI.Middleware
             }
             catch (ValidationException ex)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errors = ex.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(e => e.ErrorMessage).ToArray()
+                    );
+
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";
 
-                var errors = ex.Errors.Select(e => new
-                {
-                    propertyName = e.PropertyName,
-                    errorMessage = e.ErrorMessage
-                });
-
                 await context.Response.WriteAsync(JsonSerializer.Serialize(new { errors }));
-            }
-            catch (Exception ex)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                await context.Response.WriteAsync("An unexpected error occurred.");
             }
         }
     }

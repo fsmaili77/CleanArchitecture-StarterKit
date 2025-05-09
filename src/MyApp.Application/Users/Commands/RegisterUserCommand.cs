@@ -11,9 +11,10 @@ namespace MyApp.Application.Users.Commands
     public class RegisterUserCommand : IRequest<Guid>
     
     {
-        public Guid Id { get; set; }  = Guid.NewGuid(); // Default to a new GUID
         public string Name { get; set; } = default!;
-        public string Email { get; set; } = default!;        
+        public string Email { get; set; } = default!;    
+        public string Password { get; set; } = default!;
+        public string Role { get; set; } = "User"; // Default role is "User"   
         
     }
 }

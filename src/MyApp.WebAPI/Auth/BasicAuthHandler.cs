@@ -62,7 +62,7 @@ namespace MyApp.WebAPI.Auth
                 var password = credentials[1];
 
                 var user = await _userRepository.GetUserByEmailAsync(email);
-                if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+                if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
 
                     return AuthenticateResult.Fail("Invalid credentials");
 
