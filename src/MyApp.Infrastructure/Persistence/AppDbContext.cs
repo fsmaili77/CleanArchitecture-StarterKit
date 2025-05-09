@@ -26,14 +26,30 @@ namespace MyApp.Infrastructure.Persistence
             base.OnModelCreating(modelBuilder);
 
             // Seed a user
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), // Fixed GUID for repeatability
-                Name = "Admin",
-                Email = "admin@example.com",
-                Password = "admin123", // ⚠️ Only for seeding — hash real passwords in prod!
-                CreatedAt = new DateTime(2023, 01, 01, 0, 0, 0, DateTimeKind.Utc) // ✅ fixed DateTime
-            });
+            var hashedAdmin = "$2a$11$6i/nZg0pwd.3JygOZbOkL.O7B9l5z5lTv2oya0MYeCOT.olksAHwi"; // Example hashed password for admin
+            
+            var hashedUser  = "$2a$11$anPFxflI.0ogrw8Ah5z8wuY.10MOuiI.KUFlm2CEuKHTWmozkvHdK"; // Example hashed password for user
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                    Name = "Admin",
+                    Email = "admin@example.com",
+                    PasswordHash = hashedAdmin,
+                    Role = "Admin",
+                    CreatedAt = new DateTime(2023, 1, 1)
+                },
+                new User
+                {
+                    Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                    Name = "Regular User",
+                    Email = "user@example.com",
+                    PasswordHash = hashedUser,
+                    Role = "User",
+                    CreatedAt = new DateTime(2023, 1, 2)
+                });
+            // Add more seed data as needed
         }        
     }
     

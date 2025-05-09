@@ -18,6 +18,7 @@ namespace MyApp.Application.Interfaces
         Task DeleteUserAsync(Guid userId);     
         Task<bool> UserExistsAsync(Guid userId);
         Task<bool> UserExistsByEmailAsync(string email);   
-        Task<User> GetUserByEmailAndPasswordAsync(string email, string password); // This method retrieves a user by their email and password.
+        Task<User?> GetUserByEmailAsync(string email); // This method checks if a user exists by their email.
+        Task<User?> GetUserByEmailAndPasswordAsync(string email, string password); // This method retrieves a user by their email and password.
     }
 }

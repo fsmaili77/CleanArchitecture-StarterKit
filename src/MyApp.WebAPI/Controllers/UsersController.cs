@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.Application.DTOs;
 using MyApp.Application.Interfaces;
@@ -65,15 +67,44 @@ namespace MyApp.WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(userDto); // Return the user DTO as the response
-            
+            return Ok(userDto); // Return the user DTO as the response            
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userRepository.GetAllUsersAsync();
-            return Ok(users);
+            var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+            if (role == "Admin")
+            {
+                // Admin sees all users
+                var users = await _mediator.Send(new GetAllUsersQuery());
+                return Ok(users);
+            }
+
+            // Regular user only sees their own info
+            var email = User.Identity?.Name;
+            if (email == null) return Unauthorized();
+
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            if (user == null) return NotFound();
+
+            var dto = new UserDto
+            {
+                Name = user.Name,
+                Email = user.Email
+            };
+
+            return Ok(new[] { dto });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin-only")]
+        public IActionResult GetAdminSecret()
+        {
+            // This endpoint is only accessible to users with the "Admin" role.
+            return Ok("You are an Admin !");
         }
     }
     

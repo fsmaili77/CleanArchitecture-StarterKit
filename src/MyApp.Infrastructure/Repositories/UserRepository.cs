@@ -67,7 +67,12 @@ namespace MyApp.Infrastructure.Repositories
             return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
-        public async Task<User> GetUserByEmailAndPasswordAsync(string email, string password)
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string password)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }

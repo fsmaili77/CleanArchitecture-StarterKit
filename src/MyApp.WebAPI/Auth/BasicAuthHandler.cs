@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using MyApp.Application.Interfaces;
 using System.Text.Encodings.Web;
+using BCrypt.Net;
 
 namespace MyApp.WebAPI.Auth
 {
@@ -35,20 +36,39 @@ namespace MyApp.WebAPI.Auth
             {
                 var authHeaderRaw = Request.Headers["Authorization"].ToString();
                 if (string.IsNullOrWhiteSpace(authHeaderRaw))
-                    return AuthenticateResult.Fail("Authorization header is empty");
+                    return AuthenticateResult.Fail("Missing Authorization Header");
+                AuthenticationHeaderValue authHeader;
 
-                var authHeader = AuthenticationHeaderValue.Parse(authHeaderRaw);
+                try
+                {
+                    authHeader = AuthenticationHeaderValue.Parse(authHeaderRaw);
+                }
+                catch (FormatException)
+                {
+                    return AuthenticateResult.Fail("Invalid Authorization Header Format");
+                }
+
+                if (!authHeader.Scheme.Equals("Basic", StringComparison.OrdinalIgnoreCase))
+                    return AuthenticateResult.Fail("Invalid Authorization Scheme");
+
+              //  var authHeader = AuthenticationHeaderValue.Parse(authHeaderRaw);
+
                 var credentialBytes = Convert.FromBase64String(authHeader.Parameter ?? "");
-                var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
+                var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
+
+                if (credentials.Length != 2)
+                    return AuthenticateResult.Fail("Invalid Basic Auth Format");
                 var email = credentials[0];
                 var password = credentials[1];
 
-                var user = await _userRepository.GetUserByEmailAndPasswordAsync(email, password);
-                if (user == null)
+                var user = await _userRepository.GetUserByEmailAsync(email);
+                if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+
                     return AuthenticateResult.Fail("Invalid credentials");
 
                 var claims = new[] {
                     new Claim(ClaimTypes.Name, user.Email ?? string.Empty),
+                    new Claim(ClaimTypes.Role, user.Role ?? "User")
                 };
                 var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
