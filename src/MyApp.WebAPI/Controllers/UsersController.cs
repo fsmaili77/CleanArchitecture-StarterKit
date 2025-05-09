@@ -38,16 +38,35 @@ namespace MyApp.WebAPI.Controllers
             // var handler = new RegisterUserHandler(_userRepository);            
             var userId = await _mediator.Send(command);         
 
-            return CreatedAtAction(nameof(GetById), new { id = userId }, new { Id = userId });           
-            
-            
+            return CreatedAtAction(nameof(GetById), new { id = userId }, new { Id = userId });  
         }
+
+        [AllowAnonymous]
+        // This endpoint allows users to log in by providing their email and password.
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+        {
+            // Call the application layer to handle the login logic
+            // var handler = new LoginUserHandler(_userRepository);
+            var token = await _mediator.Send(command);
+            return Ok(new { token });
+        }
+
+        [Authorize]
+        // This endpoint allows users to secure any endpoint.
+        [HttpGet("me")]
+        public IActionResult GetMyInfo()
+        {
+            var email = User.Identity?.Name;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            return Ok(new { email, role });
+        }
+
 
         [HttpGet("{id}")]
         // This endpoint retrieves a user by their ID.
-        // It returns a DTO containing the user's details.
-        
-        
+        // It returns a DTO containing the user's details.      
         public async Task<IActionResult> GetById(Guid id)
         {
             // use IMediator to send the query to the appropriate handler
