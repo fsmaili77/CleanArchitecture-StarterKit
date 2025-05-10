@@ -46,7 +46,7 @@ src/
 1. **Clone** the repo:
 
    ```bash
-   git clone https://github.com/yourusername/MyApp.StarterKit.git
+   git clone https://github.com/fsmaili77/MyApp.StarterKit.git
    cd MyApp.StarterKit
    ```
 
