@@ -53,6 +53,24 @@ namespace MyApp.WebAPI.Controllers
         }
 
         [Authorize]
+        [HttpPost("logout")]
+        // This endpoint allows users to log out.
+        public IActionResult Logout()
+        {
+            // Invalidate the user's session or token here if needed
+            return Ok("Logged out successfully");
+        }
+
+        // This endpoint allows users to refresh their access token using a refresh token.
+        [AllowAnonymous]
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+        {
+            var newAccessToken = await _mediator.Send(command);
+            return Ok(new { accessToken = newAccessToken });
+        }
+
+        [Authorize]
         // This endpoint allows users to secure any endpoint.
         [HttpGet("me")]
         public IActionResult GetMyInfo()

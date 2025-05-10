@@ -15,6 +15,8 @@ namespace MyApp.Core.Entities
         // Password should be hashed and not stored in plain text.
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string? Role { get; set; } = "User"; // e.g., "Admin", "User", etc.
+        public string? RefreshToken { get; set; } // For JWT refresh token functionality
+        public DateTime RefreshTokenExpiryTime { get; set; } // Expiry time for the refresh token
     }
     
 }
