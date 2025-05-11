@@ -10,7 +10,7 @@ A clean, scalable ASP.NET Core 8.0 Web API starter kit built with **Clean Archit
 src/
 🔹️ MyApp.WebAPI              # API entry point
 🔹️ MyApp.Application         # Use cases (MediatR commands, queries, validators)
-🔹️ MyApp.Infrastructure      # EF Core, repository implementations
+🔹️ MyApp.Infrastructure      # EF Core, repository implementations, services
 🔹️ MyApp.Core                # Domain models, interfaces
 ```
 
@@ -18,19 +18,24 @@ src/
 
 ## 🚀 Features
 
-✅ Clean Architecture (CQRS + layered separation)
-✅ Secure JWT-based Authentication
-✅ Role-based Authorization
-✅ FluentValidation + Global Validation Errors
-✅ MediatR for decoupled command/query handling
-✅ EF Core + Code-first Migrations
-✅ Swagger with JWT support
-✅ Seeded Admin & User accounts
+✅ Clean Architecture (CQRS + layered separation)  
+✅ Secure JWT-based Authentication  
+✅ Refresh Token Support  
+✅ Role-based Authorization (Admin, User)  
+✅ Email Verification on Registration  
+✅ Resend Verification Email  
+✅ Password Reset (request + confirm)  
+✅ HTML Email Support (via Mailtrap SMTP)  
+✅ FluentValidation + Global Validation Errors  
+✅ MediatR for decoupled command/query handling  
+✅ EF Core + Code-first Migrations  
+✅ Swagger UI with JWT Support  
+✅ Seeded Admin & User accounts 
 ✅ Easily extensible for any domain
 
 ---
 
-## 🔐 Seeded Users
+## 🔐 Seeded Users (for testing)
 
 | Role  | Email                                         | Password |
 | ----- | --------------------------------------------- | -------- |
@@ -71,6 +76,8 @@ src/
 ---
 
 ## 🔐 JWT Authentication
+### Login
+
 
 1. Call `/api/users/login` with a POST body:
 
