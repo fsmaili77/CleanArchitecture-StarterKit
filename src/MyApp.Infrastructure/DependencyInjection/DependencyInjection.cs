@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyApp.Application.Interfaces;
 using MyApp.Infrastructure.Persistence;
 using MyApp.Infrastructure.Repositories;
+using MyApp.Infrastructure.Services;
 
 namespace MyApp.Infrastructure.DependencyInjection
 {
@@ -22,6 +23,7 @@ namespace MyApp.Infrastructure.DependencyInjection
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }
