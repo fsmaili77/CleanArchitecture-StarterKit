@@ -21,6 +21,8 @@ namespace MyApp.Core.Entities
         public string? EmailVerificationToken { get; set; }
         // Token used for email verification
         public DateTime? LastVerificationSentAt { get; set; }
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiry { get; set; }
     }
     
 }

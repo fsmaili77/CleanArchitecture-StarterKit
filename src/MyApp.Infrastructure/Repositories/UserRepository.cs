@@ -81,5 +81,9 @@ namespace MyApp.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.EmailVerificationToken == token);
         }
+        public async Task<User?> GetUserByResetTokenAsync(string token)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == token);
+        }
     }
 }

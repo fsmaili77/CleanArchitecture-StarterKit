@@ -169,6 +169,30 @@ namespace MyApp.WebAPI.Controllers
 
             return Ok("Verification email resent.");
         }
+
+        [AllowAnonymous]
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+                return BadRequest("Invalid or expired password reset token.");
+
+            return Ok("Password has been successfully reset.");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("request-password-reset")]
+        public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+                return BadRequest("Password reset request failed. Email may not be verified or found.");
+
+            return Ok("Password reset instructions have been sent to your email.");
+        }
     }
     
 }
