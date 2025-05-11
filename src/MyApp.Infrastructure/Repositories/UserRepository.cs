@@ -76,5 +76,10 @@ namespace MyApp.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }
+
+        public async Task<User?> GetUserByVerificationTokenAsync(string token)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.EmailVerificationToken == token);
+        }
     }
 }

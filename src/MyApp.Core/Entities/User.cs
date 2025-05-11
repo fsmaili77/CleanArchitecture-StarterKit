@@ -17,6 +17,10 @@ namespace MyApp.Core.Entities
         public string? Role { get; set; } = "User"; // e.g., "Admin", "User", etc.
         public string? RefreshToken { get; set; } // For JWT refresh token functionality
         public DateTime RefreshTokenExpiryTime { get; set; } // Expiry time for the refresh token
+        public bool IsEmailVerified { get; set; } = false;
+        public string? EmailVerificationToken { get; set; }
+        // Token used for email verification
+        public DateTime? LastVerificationSentAt { get; set; }
     }
     
 }

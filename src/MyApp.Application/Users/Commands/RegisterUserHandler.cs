@@ -30,6 +30,9 @@ namespace MyApp.Application.Users.Commands
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
             // Hash the password using BCrypt or any other hashing algorithm
 
+            // Generate secure email verification token
+            var emailVerificationToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
@@ -37,8 +40,12 @@ namespace MyApp.Application.Users.Commands
                 Email = request.Email,
                 Password = hashedPassword,
                 Role = request.Role ?? "User",
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                EmailVerificationToken = emailVerificationToken,
+                IsEmailVerified = false
             };
+            // Log the token for debugging purposes
+            Console.WriteLine($"Email Verification Token: {emailVerificationToken}");
 
             await _userRepository.CreateUserAsync(user);
             return user.Id;

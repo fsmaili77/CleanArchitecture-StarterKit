@@ -20,5 +20,6 @@ namespace MyApp.Application.Interfaces
         Task<bool> UserExistsByEmailAsync(string email);   
         Task<User?> GetUserByEmailAsync(string email); // This method checks if a user exists by their email.
         Task<User?> GetUserByEmailAndPasswordAsync(string email, string password); // This method retrieves a user by their email and password.
+        Task<User?> GetUserByVerificationTokenAsync(string token); // This method retrieves a user by their email verification token.
     }
 }

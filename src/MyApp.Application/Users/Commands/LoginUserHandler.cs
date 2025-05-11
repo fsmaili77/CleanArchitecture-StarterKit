@@ -32,6 +32,8 @@ namespace MyApp.Application.Users.Commands
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
                 throw new UnauthorizedAccessException("Invalid credentials");
+            if (!user.IsEmailVerified)
+            throw new UnauthorizedAccessException("Email not verified. Please check your inbox.");
 
             var jwtSection = _configuration.GetSection("Jwt");
             var key = Encoding.ASCII.GetBytes(jwtSection["Key"]!);

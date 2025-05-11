@@ -145,6 +145,30 @@ namespace MyApp.WebAPI.Controllers
             // This endpoint is only accessible to users with the "Admin" role.
             return Ok("You are an Admin !");
         }
+
+        [AllowAnonymous]
+        [HttpGet("verify")]
+        public async Task<IActionResult> VerifyEmail([FromQuery] string token)
+        {
+            var result = await _mediator.Send(new VerifyEmailCommand { Token = token });
+
+            if (!result)
+                return BadRequest("Invalid or expired verification token.");
+
+            return Ok("Email successfully verified!");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resend-verification")]
+        public async Task<IActionResult> ResendVerification([FromBody] ResendVerificationCommand command)
+        {
+            var success = await _mediator.Send(command);
+
+            if (!success)
+                return BadRequest("Email is already verified or not found.");
+
+            return Ok("Verification email resent.");
+        }
     }
     
 }
