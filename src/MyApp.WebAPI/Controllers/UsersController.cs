@@ -35,6 +35,7 @@ namespace MyApp.WebAPI.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
             // Call the application layer to handle the registration logic
+            // The code below is commented out as it is not needed when using MediatR
             // var handler = new RegisterUserHandler(_userRepository);            
             var userId = await _mediator.Send(command);         
 

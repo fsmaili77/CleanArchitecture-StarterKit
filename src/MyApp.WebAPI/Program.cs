@@ -23,7 +23,8 @@ builder.Services.AddControllers();
 
 // Jwt configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+var keyString = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key not configured");
+var key = Encoding.ASCII.GetBytes(keyString);
 
 builder.Services.AddAuthentication(options =>
 {

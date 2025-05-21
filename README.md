@@ -8,10 +8,10 @@ A clean, scalable ASP.NET Core 8.0 Web API starter kit built with **Clean Archit
 
 ```
 src/
-🔹️ MyApp.WebAPI              # API entry point
-🔹️ MyApp.Application         # Use cases (MediatR commands, queries, validators)
-🔹️ MyApp.Infrastructure      # EF Core, repository implementations, services
-🔹️ MyApp.Core                # Domain models, interfaces
+🔹️ MyApp.WebAPI              # Presentation layer (Controllers, DI, Middleware, API entry point)
+🔹️ MyApp.Application         # Use cases (DTOs, Interfaces, Services, MediatR commands, queries, validators)
+🔹️ MyApp.Infrastructure      # External concerns (EF Core, APIs, Repository implementations, Services, File system)
+🔹️ MyApp.Core                # Business rules (Entities -> Domain models, Interfaces)
 ```
 
 ---
